@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block head %}朝日新聞{% endblock %}
+{% block content %}
+  <div class="mdui-appbar mdui-appbar-fixed">
+  <div class="mdui-toolbar mdui-color-theme">
+    <a href="javascript:window.history.go(-1);" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">arrow_back</i></a>
+    <span class="mdui-typo-title">朝日新聞</span>
+    <div class="mdui-toolbar-spacer"></div>
+    <a href="javascript:window.location.href = '/';" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">home</i></a>
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">share</i></a>
+  </div>
+  </div>
+
+  <div class="mdui-container mdui-center"><div class="mdui-row">
+      <div class="mdui-col-xs-12">
+        <div style="height:72px"></div>
+      </div>
+      <div class="mdui-col-xs-12">
+          <div class="mdui-card" id="content">
+          <!-- 卡片头部，包含头像、标题、副标题 -->
+          <div class="mdui-card-header">
+            <img class="mdui-card-header-avatar" src="{{ url_for('static', filename = 'avatar.png') }}"/>
+            <div class="mdui-card-header-title">{{ info['info']['auth'] }}</div>
+            <div class="mdui-card-header-subtitle">{{ info['info']['update'] }}</div>
+          </div>
+          <!-- 卡片的媒体内容，可以包含图片、视频等媒体内容，以及标题、副标题 -->
+          <div class="mdui-card-media">
+            {% if info['info']['image'] %}
+            <img src="{{ info['info']['image'] }}"/>
+            <!-- 卡片中可以包含一个或多个菜单按钮 -->
+            <div class="mdui-card-menu">
+              <button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" href="{{ info['info']['image'] }}" download>
+              <i class="mdui-icon material-icons">cloud_download</i>
+              </button>
+            </div>
+            {% endif %}
+          </div>
+          <!-- 卡片的标题和副标题 -->
+          <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title mdui-center center" align="center">{{ info['info']['title'] }}</div>
+          </div>
+          <!-- 卡片的内容 -->
+          <div class="mdui-card-content">{{ info['info']['text']|safe }}</div>
+          <!-- 卡片的按钮 -->
+          <div class="mdui-card-actions">
+            <button class="mdui-btn mdui-ripple" {% if order == 0 %} disabled {% endif %} onclick = "load({{ order - 1 }})"><i class="mdui-icon material-icons">chevron_left</i>上一篇</button>
+            <button class="mdui-btn mdui-ripple" {% if order == num %} disabled {% endif %} onclick="load({{ order + 1 }})">下一篇<i class="mdui-icon material-icons">chevron_right</i></button>
+          </div>
+          </div>
+      </div>
+      <div class="mdui-col-xs-12">
+        <div style="height:20px"></div>
+        </div>
+  </div></div>
+  {% endblock %}

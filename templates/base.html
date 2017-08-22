@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#3F51B5">
+  <meta name="mobile-web-app-capable" content="yes"> 
+  <title>{% block head %}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/mdui.min.css') }}">
+</head>
+
+<body class="mdui-theme-primary-indigo mdui-theme-accent-pink">{% block content %}{% endblock %}
+  <button class="mdui-fab mdui-color-theme-accent mdui-ripple mdui-fab-fixed" id="back_top">
+    <i class="mdui-icon material-icons">vertical_align_top</i>
+  </button>
+
+  {% block scripts %}<!--  Scripts-->
+  <script src="{{ url_for('static', filename = 'js/mdui.min.js') }}"></script>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script>
+    $('#back_top').click(function () {
+        $("body").animate({ scrollTop: 0 }, 500);
+    });
+  </script>
+  <script>
+    function load(order)
+    {
+        window.location.href = "/articles/" + order;
+    }
+  </script>{% endblock %}
+</body>
+</html>
