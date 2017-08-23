@@ -6,9 +6,6 @@ import _pickle as pickle
 
 app = Flask(__name__)
 bootstarp = Bootstrap(app)
-data = None
-stamp = 0
-
 #router
 from flask import render_template, redirect, request
 @app.route('/', methods = ['GET'])
@@ -24,9 +21,11 @@ def index():
                 print('Old version found. Now is ' + str(now_time()) + '. ')
                 data = Receive()
                 with open('data.pkl', 'wb') as g:
+                    g.seek(0)
                     g.truncate()
                     pickle.dump(data, g)
                 stamp = now_time()
+                f.seek(0)
                 f.truncate()
                 pickle.dump(stamp, f)
                 print('Stamp updated : ' + str(stamp))
@@ -38,11 +37,9 @@ def index():
         print('stamp does not exist')
         data = Receive()
         with open('data.pkl', 'wb') as f:
-            f.truncate()
             pickle.dump(data, f)
         stamp = now_time()
         with open('stamp.pkl', 'wb') as f:
-            f.truncate()
             pickle.dump(stamp, f)
     
     return render_template('index.html', data = data, stamp = stamp, num = len(data))

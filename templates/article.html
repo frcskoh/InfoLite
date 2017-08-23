@@ -3,7 +3,7 @@
 {% block content %}<div id="interface">
   <div class="mdui-appbar mdui-appbar-fixed">
   <div class="mdui-toolbar mdui-color-theme">
-    <a href="javascript:load(track.pop());" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '返回'}">
+    <a id="go_back" href="" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '返回'}">
     <i class="mdui-icon material-icons">arrow_back</i>
     </a>
     <span class="mdui-typo-title">朝日新聞</span>
@@ -69,3 +69,18 @@
         <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button>
     </div>
   </div>{% endblock %}
+  {% block scripts %}{{ super() }}
+  <script>
+  $('#go_back').click(
+        function (){
+            if (track.length > 0)
+            {
+                load(track.pop());
+            }
+            else
+            {
+                load(-1);
+            }
+    });
+  </script>
+  {% endblock %}

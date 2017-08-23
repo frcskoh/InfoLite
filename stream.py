@@ -54,7 +54,8 @@ async def ArticleBuild(ID, session):
                         except IOError:
                             print('Receive the image error ! ' + ID)
                         else:
-                            print('Downloaded. ' + img_url)
+                            #print('Downloaded. ' + img_url)
+                            pass
                 else:
                     main_image = None
             else:
