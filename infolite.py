@@ -19,13 +19,14 @@ def index():
     try:
         with open('stamp.pkl', 'rb+') as f:
             stamp = pickle.load(f)
-            if abs(stamp - now_time()) > 600:
+            print('Current Stamp : ' + str(stamp))
+            if abs(stamp - now_time()) / 1000 > 900:
+                print('Old version found. ')
                 data = Receive()
                 with open('data.pkl', 'wb') as g:
                     pickle.dump(data, g)
                 stamp = now_time()
                 pickle.dump(stamp, f)
-
                 print('Stamp updated : ' + str(now_time()))
             else:
                 with open('data.pkl', 'rb') as f:

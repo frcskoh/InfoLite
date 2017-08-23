@@ -1,19 +1,23 @@
 {% extends "base.html" %}
-{% block head %}朝日新聞{% endblock %}
+{% block head %}{{ info['info']['title'] }}{% endblock %}
 {% block content %}
+<div id="interface">
   <div class="mdui-appbar mdui-appbar-fixed">
   <div class="mdui-toolbar mdui-color-theme">
-    <a href="javascript:window.history.go(-1);" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">arrow_back</i></a>
+    <a href="javascript:load(track.pop());" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '返回'}">
+    <i class="mdui-icon material-icons">arrow_back</i>
+    </a>
     <span class="mdui-typo-title">朝日新聞</span>
     <div class="mdui-toolbar-spacer"></div>
-    <a href="javascript:window.location.href = '/';" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">home</i></a>
-    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">share</i></a>
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '主题'}"><i class="mdui-icon material-icons">settings_brightness</i></a>
+    <a href="javascript:go('/');" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '主页'}"><i class="mdui-icon material-icons">home</i></a>
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '分享'}"><i class="mdui-icon material-icons">share</i></a>
   </div>
   </div>
 
-  <div class="mdui-container mdui-center"><div class="mdui-row">
+  <div id="main_content" class="mdui-container mdui-center" style="display:none;"><div class="mdui-row">
       <div class="mdui-col-xs-12">
-        <div style="height:72px"></div>
+        <div style="height:54px"></div>
       </div>
       <div class="mdui-col-xs-12">
           <div class="mdui-card" id="content">
@@ -25,15 +29,14 @@
           </div>
           <!-- 卡片的媒体内容，可以包含图片、视频等媒体内容，以及标题、副标题 -->
           <div class="mdui-card-media">
-            {% if info['info']['image'] %}
-            <img src="{{ info['info']['image'] }}"/>
+            {% if info['info']['main_image'] %}<img src="{{ info['info']['main_image'] }}" class="mdui-img-fluid">
             <!-- 卡片中可以包含一个或多个菜单按钮 -->
             <div class="mdui-card-menu">
-              <button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" href="{{ info['info']['image'] }}" download>
+              <button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" mdui-tooltip="下载" >
+              <a href="{{ info['info']['image'] }}" download>
               <i class="mdui-icon material-icons">cloud_download</i>
-              </button>
-            </div>
-            {% endif %}
+              </a></button>
+            </div>{% endif %}
           </div>
           <!-- 卡片的标题和副标题 -->
           <div class="mdui-card-primary">
@@ -52,4 +55,14 @@
         <div style="height:20px"></div>
         </div>
   </div></div>
-  {% endblock %}
+  </div>
+  
+  <div class="mdui-dialog" id="zoom">
+    <div class="mdui-dialog-title">查看大图</div>
+    <div class="mdui-dialog-content">
+    <div id="img_content" class="mdui-container mdui-center"></div>
+    </div>
+    <div class="mdui-dialog-actions">
+        <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button>
+    </div>
+  </div>{% endblock %}

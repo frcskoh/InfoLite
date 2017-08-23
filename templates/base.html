@@ -9,7 +9,9 @@
   <link rel="stylesheet" href="{{ url_for('static', filename = 'css/mdui.min.css') }}">
 </head>
 
-<body class="mdui-theme-primary-indigo mdui-theme-accent-pink">{% block content %}{% endblock %}
+<body class="mdui-theme-primary-indigo mdui-theme-accent-pink">
+  <div id="spinner" class="mdui-spinner mdui-spinner-colorful"></div>
+  {% block content %}{% endblock %}
   <button class="mdui-fab mdui-color-theme-accent mdui-ripple mdui-fab-fixed" id="back_top">
     <i class="mdui-icon material-icons">vertical_align_top</i>
   </button>
@@ -18,15 +20,46 @@
   <script src="{{ url_for('static', filename = 'js/mdui.min.js') }}"></script>
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script>
-    $('#back_top').click(function () {
+  $(function(){
+    $("#spinner").hide();
+    $("#main_content").fadeIn();
+    $('#back_top').click(
+        function () {
         $("body").animate({ scrollTop: 0 }, 500);
     });
-  </script>
-  <script>
-    function load(order)
+  })
+var track = new Array([-1]);
+
+function go(URL)
+{
+    $.get(URL, function(data){
+            $("#interface").fadeOut();
+            $("#interface").html(data);
+            $("#interface").fadeIn("slow");
+        })
+}
+
+function load(order)
+{   
+    if (order < 0)
     {
-        window.location.href = "/articles/" + order;
+        track = [-1];
+        go("/");
     }
+    else
+    {
+        track.push(order);
+        go("/articles/" + order.toString());
+    }
+}
+function refresh()
+{
+    track = [-1];
+    window.location.reload();
+}
+function zoom()
+{
+}
   </script>{% endblock %}
 </body>
 </html>
