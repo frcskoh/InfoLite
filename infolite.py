@@ -41,7 +41,7 @@ def index():
         with open('stamp.pkl', 'wb') as f:
             pickle.dump(stamp, f)
     
-    return render_template('index.html', data = data, stamp = stamp)
+    return render_template('index.html', data = data, stamp = stamp, num = len(data))
 
 @app.route('/articles/<order>', methods = ['GET'])
 def articles(order):
@@ -49,7 +49,7 @@ def articles(order):
     if not data:
         return redirect('/')
     else:
-        return render_template('article.html', info = data[int(order)], order = int(order), num = len(data))
+        return render_template('article.html', info = data[int(order)], order = int(order))
         
 if __name__ == '__main__':
     app.run(debug = True)

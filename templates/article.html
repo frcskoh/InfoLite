@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block head %}{{ info['info']['title'] }}{% endblock %}
-{% block content %}
-<div id="interface">
+{% block content %}<div id="interface">
   <div class="mdui-appbar mdui-appbar-fixed">
   <div class="mdui-toolbar mdui-color-theme">
     <a href="javascript:load(track.pop());" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '返回'}">
@@ -46,8 +45,12 @@
           <div class="mdui-card-content">{{ info['info']['text']|safe }}</div>
           <!-- 卡片的按钮 -->
           <div class="mdui-card-actions">
-            <button class="mdui-btn mdui-ripple" {% if order == 0 %} disabled {% endif %} onclick = "load({{ order - 1 }})"><i class="mdui-icon material-icons">chevron_left</i>上一篇</button>
-            <button class="mdui-btn mdui-ripple" {% if order == num %} disabled {% endif %} onclick="load({{ order + 1 }})">下一篇<i class="mdui-icon material-icons">chevron_right</i></button>
+            <button id="last" class="mdui-btn mdui-ripple" name="{{ order - 1 }}" {% if order == 0 %} disabled {% endif %}>
+            <i class="mdui-icon material-icons">chevron_left</i>上一篇
+            </button>
+            <button id="next" class="mdui-btn mdui-ripple" name="{{ order + 1 }}" {% if order == num %} disabled {% endif %}>
+            下一篇<i class="mdui-icon material-icons">chevron_right</i>
+            </button>
           </div>
           </div>
       </div>

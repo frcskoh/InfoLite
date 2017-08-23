@@ -8,7 +8,7 @@
   <title>{% block head %}{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename = 'css/mdui.min.css') }}">
 </head>
-
+{% block Dydata %}{% endblock %}
 <body class="mdui-theme-primary-indigo mdui-theme-accent-pink">
   <div id="spinner" class="mdui-spinner mdui-spinner-colorful"></div>
   {% block content %}{% endblock %}
@@ -20,6 +20,7 @@
   <script src="{{ url_for('static', filename = 'js/mdui.min.js') }}"></script>
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script>
+  var num = parseInt($("#num").attr("name"))
   $(function(){
     $("#spinner").hide();
     $("#main_content").fadeIn();
@@ -27,6 +28,22 @@
         function () {
         $("body").animate({ scrollTop: 0 }, 500);
     });
+    $("#last").click(
+        function(){
+            order = parseInt($("#last").attr("name"));
+            if ((order > 0) && (order < num))
+            {
+                load(order);
+            }
+    })
+    $("#next").click(
+        function(){
+            order = parseInt($("#next").attr("name"));
+            if ((order > 0) && (order < num))
+            {
+                load(order);
+            }
+    })
   })
 var track = new Array([-1]);
 
