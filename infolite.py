@@ -51,7 +51,7 @@ def index():
 def articles(order):
     global data
     if not data:
-        with open('data.pkl', 'wb') as f:
+        with open('data.pkl', 'rb') as f:
             data = pickle.load(f)
     print(str(order) + ' with ' + str(len(data)))
     return render_template('article.html', info = data[int(order)], order = int(order))    
