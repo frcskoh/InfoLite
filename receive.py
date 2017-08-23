@@ -1,7 +1,5 @@
-from bs4 import BeautifulSoup
 from stream import *
 from multiprocessing import Pool, freeze_support
-import json
 from sys import setrecursionlimit
 setrecursionlimit(1000000)
 

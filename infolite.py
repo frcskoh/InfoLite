@@ -2,7 +2,7 @@ from flask import Flask, redirect
 from flask_bootstrap import Bootstrap
 from time import time as now_time
 from receive import Receive
-import pickle
+import _pickle as pickle
 
 app = Flask(__name__)
 bootstarp = Bootstrap(app)
@@ -19,15 +19,17 @@ def index():
     try:
         with open('stamp.pkl', 'rb+') as f:
             stamp = pickle.load(f)
-            print('Current Stamp : ' + str(stamp))
-            if abs(stamp - now_time()) / 1000 > 900:
-                print('Old version found. ')
+            print('Cache Stamp : ' + str(stamp))
+            if abs(stamp - now_time()) > 900:
+                print('Old version found. Now is ' + str(now_time()) + '. ')
                 data = Receive()
                 with open('data.pkl', 'wb') as g:
+                    g.truncate()
                     pickle.dump(data, g)
                 stamp = now_time()
+                f.truncate()
                 pickle.dump(stamp, f)
-                print('Stamp updated : ' + str(now_time()))
+                print('Stamp updated : ' + str(stamp))
             else:
                 with open('data.pkl', 'rb') as f:
                     data = pickle.load(f)
@@ -36,9 +38,11 @@ def index():
         print('stamp does not exist')
         data = Receive()
         with open('data.pkl', 'wb') as f:
+            f.truncate()
             pickle.dump(data, f)
         stamp = now_time()
         with open('stamp.pkl', 'wb') as f:
+            f.truncate()
             pickle.dump(stamp, f)
     
     return render_template('index.html', data = data, stamp = stamp, num = len(data))

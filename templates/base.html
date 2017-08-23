@@ -8,7 +8,7 @@
   <title>{% block head %}{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename = 'css/mdui.min.css') }}">
 </head>
-{% block Dydata %}{% endblock %}
+{% block Dydata %}<div id="num" name="{{ num }}"></div>{% endblock %}
 <body class="mdui-theme-primary-indigo mdui-theme-accent-pink">
   <div id="spinner" class="mdui-spinner mdui-spinner-colorful"></div>
   {% block content %}{% endblock %}
@@ -44,6 +44,17 @@
                 load(order);
             }
     })
+    for (var i = 0; i < parseInt($("#num").attr("name")); i++)
+    {
+        $("#card_" + i.toString()).click(
+            function(){
+                load(parseInt($(this).attr("name")));
+            })
+        $("#card_" + i.toString()).dblclick(
+            function(){
+                load(parseInt($(this).attr("name")));
+            })
+    }
   })
 var track = new Array([-1]);
 

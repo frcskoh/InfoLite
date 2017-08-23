@@ -50,8 +50,7 @@ async def ArticleBuild(ID, session):
                                 with open(write_path, 'wb') as f:
                                     f.write(r.get(img_url).content)
                             i['src'] = os.path.join('static', 'cache', write_path)
-                            if not i['class'].find('mdui-img-fluid'):
-                                i['class'].join(' ', 'mdui-img-fluid')
+                            i['class'] = 'mdui-img-fluid'
                         except IOError:
                             print('Receive the image error ! ' + ID)
                         else:
