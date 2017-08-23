@@ -18,7 +18,7 @@
   </div>
   <div class="mdui-row-xs-1 mdui-center">
   {% for i in data %}<div class="mdui-col-xs-12">
-  <div class="mdui-card" onclick="load('{{ loop.index0 }}')">
+  <div class="mdui-card mdui-ripple" onclick="load('{{ loop.index0 }}')">
     <div class="mdui-card-primary">
       <div class="mdui-card-primary-title mdui-typo-display-1" style="font-size:20px">{{ i['title'] }}</div>
       <div class="mdui-card-primary-subtitle mdui-typo-headline" style="font-size:16px" align="right">

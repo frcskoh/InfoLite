@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect
 from flask_bootstrap import Bootstrap
 from time import time as now_time
 from receive import Receive
@@ -19,7 +19,7 @@ def index():
     try:
         with open('stamp.pkl', 'rb+') as f:
             stamp = pickle.load(f)
-            if stamp - now_time() > 600:
+            if abs(stamp - now_time()) > 600:
                 data = Receive()
                 with open('data.pkl', 'wb') as g:
                     pickle.dump(data, g)
@@ -46,12 +46,9 @@ def index():
 def articles(order):
     global data
     if not data:
-        try:
-            with open('data.pkl', 'rb') as f:
-                data = pickle.load(f)
-        except:
-            print("Reading the cache failed. ")
-    return render_template('article.html', info = data[int(order)], order = int(order), num = len(data))
-
+        return redirect('/')
+    else:
+        return render_template('article.html', info = data[int(order)], order = int(order), num = len(data))
+        
 if __name__ == '__main__':
     app.run(debug = True)
