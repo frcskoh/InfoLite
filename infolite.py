@@ -44,7 +44,7 @@ def index():
         stamp = now_time()
         with open('stamp.pkl', 'wb') as f:
             pickle.dump(stamp, f)
-    
+    print(len(data))
     return render_template('index.html', data = data, stamp = stamp, num = len(data))
 
 @app.route('/articles/<order>', methods = ['GET'])
