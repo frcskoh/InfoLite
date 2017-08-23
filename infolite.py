@@ -6,6 +6,9 @@ import _pickle as pickle
 
 app = Flask(__name__)
 bootstarp = Bootstrap(app)
+
+stamp = 0
+data = []
 #router
 from flask import render_template, redirect, request
 @app.route('/', methods = ['GET'])
@@ -48,7 +51,8 @@ def index():
 def articles(order):
     global data
     if not data:
-        return redirect('/')
+        with open('data.pkl', 'wb') as f:
+            pickle.dump(data, f)
     else:
         return render_template('article.html', info = data[int(order)], order = int(order))
         
