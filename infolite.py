@@ -53,8 +53,6 @@ def articles(order):
     if not data:
         with open('data.pkl', 'wb') as f:
             pickle.dump(data, f)
-    else:
-        return render_template('article.html', info = data[int(order)], order = int(order))
-        
+    return render_template('article.html', info = data[int(order)], order = int(order))    
 if __name__ == '__main__':
     app.run(debug = True)
