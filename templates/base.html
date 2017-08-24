@@ -19,8 +19,7 @@
   <button class="mdui-fab mdui-color-theme-accent mdui-ripple mdui-fab-fixed" id="back_top">
     <i class="mdui-icon material-icons">vertical_align_top</i>
   </button>
-
-  {% block scripts %}<!--  Scripts-->
+{% block scripts %}<!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script>
   var num = parseInt($("#num").attr("name"))
@@ -60,7 +59,9 @@
     }
   })
 var track = new Array([-1]);
-
+</script>
+{% compress 'js' %}
+<script>
 function go(URL)
 {
     $.get(URL, function(data){
@@ -91,6 +92,6 @@ function refresh()
 function zoom()
 {
 }
-  </script>{% endblock %}
+  </script>{% endcompress %}{% endblock %}
 </body>
 </html>

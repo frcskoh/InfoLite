@@ -1,11 +1,17 @@
 from flask import Flask, redirect
-from flask_bootstrap import Bootstrap
 from time import time as now_time
 from receive import Receive
 import _pickle as pickle
+from flask_htmlmin import HTMLMIN
+from jac.contrib.flask import JAC
 
 app = Flask(__name__)
-bootstarp = Bootstrap(app)
+app.config['COMPRESSOR_DEBUG'] = app.config.get('DEBUG')
+app.config['COMPRESSOR_OUTPUT_DIR'] = './static'
+app.config['COMPRESSOR_STATIC_PREFIX'] = '/static'
+app.config['MINIFY_PAGE'] = True
+jac = JAC(app)
+HTMLMIN(app)
 
 stamp = 0
 data = []

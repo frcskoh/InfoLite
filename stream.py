@@ -96,7 +96,6 @@ def StreamUpdate():
         try:
             soup = BeautifulSoup(requests.get(URLs).content, "lxml").find('ul', 'List')
             body = soup.find_all('li')[:-2]
-##            print(body)
         except:
             print('Error. Retrying...')
         else:
