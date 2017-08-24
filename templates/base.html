@@ -60,7 +60,7 @@
   })
 var track = new Array([-1]);
 </script>
-{% compress 'js' %}
+<!-- {% compress 'js' %} -->
 <script>
 function go(URL)
 {
@@ -92,6 +92,8 @@ function refresh()
 function zoom()
 {
 }
-  </script>{% endcompress %}{% endblock %}
+  </script>
+  <!-- {% endcompress %} -->
+  {% endblock %}
 </body>
 </html>

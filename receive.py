@@ -1,21 +1,15 @@
-from stream import *
-from multiprocessing import Pool, freeze_support
-from sys import setrecursionlimit
+from stream import StreamUpdate
+from time import time as now_time
 import json
-setrecursionlimit(1000000)
+import _pickle as pickle
 
-def Receive():
-    freeze_support()
-    data = None
-    while not data:
-        try:
-            pool = Pool(processes = 1)
-            result = [pool.apply_async(StreamUpdate, ()), ]
-            pool.close()
-            pool.join()
-            print('Building the data...')
-            data = json.loads(result[0].get())
-        except:
-            print('Retrying...')
-            
-    return data
+while 1:
+    try:
+        data = json.loads(StreamUpdate())
+        with open('stamp.pkl', 'wb') as f: pickle.dump(now_time(), f)
+        with open('data.pkl', 'wb') as f: pickle.dump(data, f)
+    except:
+        print('Error . Retrying...')
+    else:
+        print('Updated Successfully. ')
+        break

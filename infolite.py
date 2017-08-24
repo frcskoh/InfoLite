@@ -1,14 +1,13 @@
 from flask import Flask, redirect
 from time import time as now_time
-from receive import Receive
 import _pickle as pickle
 from flask_htmlmin import HTMLMIN
 from jac.contrib.flask import JAC
 
 app = Flask(__name__)
-app.config['COMPRESSOR_DEBUG'] = app.config.get('DEBUG')
-app.config['COMPRESSOR_OUTPUT_DIR'] = './static'
-app.config['COMPRESSOR_STATIC_PREFIX'] = '/static'
+#app.config['COMPRESSOR_DEBUG'] = app.config.get('DEBUG')
+#app.config['COMPRESSOR_OUTPUT_DIR'] = './static'
+#app.config['COMPRESSOR_STATIC_PREFIX'] = '/static'
 app.config['MINIFY_PAGE'] = True
 jac = JAC(app)
 HTMLMIN(app)
@@ -22,35 +21,19 @@ def index():
     global data
     global stamp
 
-    try:
-        with open('stamp.pkl', 'rb+') as f:
-            stamp = pickle.load(f)
-            print('Cache Stamp : ' + str(stamp))
-            if abs(stamp - now_time()) > 900:
-                print('Old version found. Now is ' + str(now_time()) + '. ')
-                data = Receive()
-                with open('data.pkl', 'wb') as g:
-                    g.seek(0)
-                    g.truncate()
-                    pickle.dump(data, g)
-                stamp = now_time()
-                f.seek(0)
-                f.truncate()
-                pickle.dump(stamp, f)
-                print('Stamp updated : ' + str(stamp))
-            else:
+    while 1:
+        try:
+            with open('stamp.pkl', 'rb') as f:
+                stamp = pickle.load(f)
+                print('Cache Stamp : ' + str(stamp))
                 with open('data.pkl', 'rb') as f:
                     data = pickle.load(f)
                 print('Read the data from cache. ' + str(stamp))
-    except IOError:
-        print('stamp does not exist')
-        data = Receive()
-        with open('data.pkl', 'wb') as f:
-            pickle.dump(data, f)
-        stamp = now_time()
-        with open('stamp.pkl', 'wb') as f:
-            pickle.dump(stamp, f)
-    print(len(data))
+        except IOError:
+            pass
+        else:
+            print(len(data))
+            break
     return render_template('index.html', data = data, stamp = stamp, num = len(data))
 
 @app.route('/articles/<order>', methods = ['GET'])
