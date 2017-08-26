@@ -56,7 +56,7 @@ async def ArticleBuild(ID, session):
                             i['src'] = os.path.join('static', 'cache', write_path)
                             i['class'] = 'mdui-img-fluid'
                         except IOError:
-                            print('Receive the image error ! ' + ID)
+                            print('Receive the image error ! %s' % (ID))
                 else:
                     main_image = None
             else:
@@ -76,7 +76,7 @@ async def ArticleBuild(ID, session):
 async def ContentMatch(part, session):
     t_info = {
         'ID' : part.a['href'].split('/articles/')[-1],
-        'free' : True if part.find('img', "有料記事") else False, 
+        'free' : False if part.find('img', "有料記事") else True, 
         'topic' : part['class']
         }
     t_info.update({'info' : await ArticleBuild(t_info['ID'], session)})

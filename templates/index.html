@@ -50,7 +50,9 @@
     <div class="mdui-card-primary">
       <div class="mdui-card-primary-title mdui-typo-display-1" style="font-size:20px">{{ i['info']['title'] }}</div>
       <div class="mdui-card-primary-subtitle mdui-typo-headline" style="font-size:14px" align="right">
-      <i class="mdui-icon material-icons">update</i>&nbsp;&nbsp;{{ i['info']['update'] }}
+        {% if i['info']['free'] %}<i class="mdui-icon material-icons">lock</i>
+        {% else %}<i class="mdui-icon material-icons">lock_open</i>{% endif %}
+        &nbsp;&nbsp;<i class="mdui-icon material-icons">update</i>&nbsp;&nbsp;{{ i['info']['update'] }}
       </div>
     </div>
   </div>
