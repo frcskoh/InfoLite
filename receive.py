@@ -3,6 +3,7 @@ from time import time as now_time
 import json
 import _pickle as pickle
 
+time_start = now_time()
 while 1:
     try:
         data = json.loads(StreamUpdate())
@@ -13,3 +14,5 @@ while 1:
     else:
         print('Updated Successfully. ')
         break
+
+print(now_time() - time_start)

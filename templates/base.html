@@ -11,6 +11,38 @@
   <title>{% block title %}{% endblock %}</title>
   <link rel="stylesheet" href="//cdn.bootcss.com/mdui/0.3.0/css/mdui.min.css">
   <script src="//cdn.bootcss.com/mdui/0.3.0/js/mdui.min.js"></script>
+  <script>
+function go(URL)
+{
+    $.get(URL, function(data){
+            $("#main_content").fadeOut();
+            $("#interface").html(data);
+            $("#main_content").fadeIn("slow");
+        })
+}
+function load(order)
+{   
+    if (order < 0)
+    {
+        track = [-1];
+        go("/");
+    }
+    else
+    {
+        track.push(order);
+        go("/articles/" + order.toString());
+    }
+}
+function refresh()
+{
+    track = [-1];
+    window.location.reload();
+}
+function zoom()
+{
+}
+var track = new Array([-1]);
+  </script>
 </head>
 {% block Dydata %}<div id="num" name="{{ num }}"></div>{% endblock %}
 <body class="mdui-theme-primary-indigo mdui-theme-accent-pink">
@@ -46,54 +78,19 @@
                 load(order);
             }
     })
-    for (var i = 0; i < parseInt($("#num").attr("name")); i++)
-    {
-        $("#card_" + i.toString()).click(
-            function(){
-                load(parseInt($(this).attr("name")));
-            })
-        $("#card_" + i.toString()).dblclick(
-            function(){
-                load(parseInt($(this).attr("name")));
-            })
-    }
+    <!-- for (var i = 0; i < parseInt($("#num").attr("name")); i++) -->
+    <!-- { -->
+        <!-- $("#card_" + i.toString()).click( -->
+            <!-- function(){ -->
+                <!-- load(parseInt($(this).attr("name"))); -->
+            <!-- }) -->
+        <!-- $("#card_" + i.toString()).dblclick( -->
+            <!-- function(){ -->
+                <!-- load(parseInt($(this).attr("name"))); -->
+            <!-- }) -->
+    <!-- } -->
   })
-var track = new Array([-1]);
 </script>
-<!-- {% compress 'js' %} -->
-<script>
-function go(URL)
-{
-    $.get(URL, function(data){
-            $("#interface").fadeOut();
-            $("#interface").html(data);
-            $("#interface").fadeIn("slow");
-        })
-}
-
-function load(order)
-{   
-    if (order < 0)
-    {
-        track = [-1];
-        go("/");
-    }
-    else
-    {
-        track.push(order);
-        go("/articles/" + order.toString());
-    }
-}
-function refresh()
-{
-    track = [-1];
-    window.location.reload();
-}
-function zoom()
-{
-}
-  </script>
-  <!-- {% endcompress %} -->
   {% endblock %}
 </body>
 </html>

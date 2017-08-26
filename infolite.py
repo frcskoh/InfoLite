@@ -2,20 +2,21 @@ from flask import Flask, redirect
 from time import time as now_time
 import _pickle as pickle
 from flask_htmlmin import HTMLMIN
-from jac.contrib.flask import JAC
+#from jac.contrib.flask import JAC
 
 app = Flask(__name__)
 #app.config['COMPRESSOR_DEBUG'] = app.config.get('DEBUG')
 #app.config['COMPRESSOR_OUTPUT_DIR'] = './static'
 #app.config['COMPRESSOR_STATIC_PREFIX'] = '/static'
 app.config['MINIFY_PAGE'] = True
-jac = JAC(app)
+#jac = JAC(app)
 HTMLMIN(app)
 
 stamp = 0
 data = []
 #router
 from flask import render_template, redirect, request
+
 @app.route('/', methods = ['GET'])
 def index():
     global data
@@ -25,10 +26,10 @@ def index():
         try:
             with open('stamp.pkl', 'rb') as f:
                 stamp = pickle.load(f)
-                print('Cache Stamp : ' + str(stamp))
+                print('Cache Stamp : %s' % (stamp))
                 with open('data.pkl', 'rb') as f:
                     data = pickle.load(f)
-                print('Read the data from cache. ' + str(stamp))
+                print('Read the data from cache. %s' % (stamp))
         except IOError:
             pass
         else:

@@ -8,10 +8,10 @@
     <div class="mdui-toolbar-spacer"></div>
     <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '主题'}"><i class="mdui-icon material-icons">settings_brightness</i></a>
     <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">color_lens</i></a>
-    <a href="javascript:refresh()" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '主题'}">
+    <a href="javascript:refresh()" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '刷新'}">
     <i class="mdui-icon material-icons">refresh</i>
     </a>
-    <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '主题'}">
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '更多'}">
     <i class="mdui-icon material-icons">more_vert</i>
     </a>
     <ul class="mdui-menu">
@@ -46,7 +46,7 @@
   </div>
   <div class="mdui-row-xs-1 mdui-center">
   {% for i in data %}<div class="mdui-col-xs-12">
-  <div class="mdui-card mdui-ripple" id="card_{{ loop.index0 }}" name="{{ loop.index0 }}">
+  <div class="mdui-card mdui-ripple" id="card_{{ loop.index0 }}" name="{{ loop.index0 }}" onclick="load({{ loop.index0 }})">
     <div class="mdui-card-primary">
       <div class="mdui-card-primary-title mdui-typo-display-1" style="font-size:20px">{{ i['info']['title'] }}</div>
       <div class="mdui-card-primary-subtitle mdui-typo-headline" style="font-size:14px" align="right">

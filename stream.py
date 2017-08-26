@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests, re, json, asyncio, aiohttp, os
+from time import time as now_time
 
 headers = {
     'Accept' : 'image/webp,image/apng,image/*,*/*;q=0.8', 
@@ -22,7 +23,7 @@ async def ArticleBuild(ID, session):
         try:
             title = soup.find('div', 'ArticleTitle').div
         except:
-            print('None title. ')
+            print('None title. %s' % (URL))
             title_text = auth = update = None
         else:
             title_text = title.h1.get_text()
@@ -32,7 +33,7 @@ async def ArticleBuild(ID, session):
         try: 
             body = soup.find('div', 'ArticleBody').div
         except:
-            print('An article void. ')
+            print('An article void. %s' % (URL))
             text = image = None
         else:
             if body.find('div', 'Image'):
@@ -43,26 +44,27 @@ async def ArticleBuild(ID, session):
                     if not os.path.exists(os.path.join('static', 'cache')):
                         os.makedirs(os.path.join('static', 'cache'))
                     for i in image.find_all('img'):
-                        img_url = "".join(('http://', i['src'].strip('"').strip('/')))
+                        img_url = 'http://%s' % (i['src'].strip('"').strip('/'))
                         write_path = os.path.join('static', 'cache', os.path.split(img_url)[-1])
                         try:
                             if not os.path.exists(write_path):
                                 with open(write_path, 'wb') as f:
                                     f.write(r.get(img_url).content)
+                                print('Downloaded. %s' % (img_url))
+                            else:
+                                print('Image file existed. %s' % (write_path))
                             i['src'] = os.path.join('static', 'cache', write_path)
                             i['class'] = 'mdui-img-fluid'
                         except IOError:
                             print('Receive the image error ! ' + ID)
-                        else:
-                            #print('Downloaded. ' + img_url)
-                            pass
                 else:
                     main_image = None
             else:
                 main_image = None
             
-            text = "".join([str(i) for i in soup.find('div', 'ArticleText').find_all('p')])
-            
+##            text = "".join([str(i) for i in soup.find('div', 'ArticleText').find_all('p')])
+            text = "".join(list(map(str, soup.find('div', 'ArticleText').find_all('p'))))
+
     return {
             'title': title_text,
             'auth' : auth,
@@ -74,21 +76,22 @@ async def ArticleBuild(ID, session):
 async def ContentMatch(part, session):
     t_info = {
         'ID' : part.a['href'].split('/articles/')[-1],
-        'free' : True if part.find('img', "有料記事") else None, 
+        'free' : True if part.find('img', "有料記事") else False, 
         'topic' : part['class']
         }
     t_info.update({'info' : await ArticleBuild(t_info['ID'], session)})
-    
     return t_info
 
 def SubProcess(body):
     session = aiohttp.ClientSession()
     loop = asyncio.get_event_loop()
-    tasks = [asyncio.ensure_future(ContentMatch(i, session)) for i in body]
+##    tasks = [asyncio.ensure_future(ContentMatch(i, session)) for i in body]
+    tasks = list(map(lambda x : asyncio.ensure_future(ContentMatch(x, session)), body))
     loop.run_until_complete(asyncio.wait(tasks))
     loop.close()
     session.close()
-    return json.dumps([i.result() for i in tasks])
+##    return json.dumps([i.result() for i in tasks])
+    return json.dumps(list(map(lambda x : x.result(), tasks)))
     
 def StreamUpdate():
     URLs = 'http://www.asahi.com/news/'
@@ -97,7 +100,7 @@ def StreamUpdate():
             soup = BeautifulSoup(requests.get(URLs).content, "lxml").find('ul', 'List')
             body = soup.find_all('li')[:-2]
         except:
-            print('Error. Retrying...')
+            print('BodyError. Retrying...')
         else:
             print('Received Successfully. ')
             break
