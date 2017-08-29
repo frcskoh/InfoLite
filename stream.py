@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
-import requests, re, json, asyncio, aiohttp, os
+from requests import session as Session
+from requests import get as Get
+import json, asyncio, aiohttp, os
 from time import time as now_time
 
 headers = {
@@ -16,7 +18,7 @@ headers = {
 async def ArticleBuild(ID, session):
     global headers
     URL = 'http://www.asahi.com/articles/' + ID
-    r = requests.session()
+    r = Session()
     async with session.get(URL) as resp:
         content = await resp.read()
         soup = BeautifulSoup(content, "lxml")
@@ -39,7 +41,7 @@ async def ArticleBuild(ID, session):
             if body.find('div', 'Image'):
                 image = body.find('div', 'Image')
                 if image.find('img'):
-                    img_url = "".join(('http://', image.img['src'].strip('"').strip('/')))
+                    img_url = 'http://%s' % (image.img['src'].strip('"').strip('/'))
                     main_image = os.path.join('static', 'cache', os.path.split(img_url)[-1])
                     if not os.path.exists(os.path.join('static', 'cache')):
                         os.makedirs(os.path.join('static', 'cache'))
@@ -61,8 +63,7 @@ async def ArticleBuild(ID, session):
                     main_image = None
             else:
                 main_image = None
-            
-##            text = "".join([str(i) for i in soup.find('div', 'ArticleText').find_all('p')])
+
             text = "".join(list(map(str, soup.find('div', 'ArticleText').find_all('p'))))
 
     return {
@@ -75,8 +76,8 @@ async def ArticleBuild(ID, session):
 
 async def ContentMatch(part, session):
     t_info = {
-        'ID' : part.a['href'].split('/articles/')[-1],
-        'free' : False if part.find('img', "有料記事") else True, 
+        'ID' : part.a['href'].split('/articles/')[-1], 
+        'free' : False if part.find('img', alt = '有料記事') else True, 
         'topic' : part['class']
         }
     t_info.update({'info' : await ArticleBuild(t_info['ID'], session)})
@@ -85,19 +86,17 @@ async def ContentMatch(part, session):
 def SubProcess(body):
     session = aiohttp.ClientSession()
     loop = asyncio.get_event_loop()
-##    tasks = [asyncio.ensure_future(ContentMatch(i, session)) for i in body]
     tasks = list(map(lambda x : asyncio.ensure_future(ContentMatch(x, session)), body))
     loop.run_until_complete(asyncio.wait(tasks))
     loop.close()
     session.close()
-##    return json.dumps([i.result() for i in tasks])
     return json.dumps(list(map(lambda x : x.result(), tasks)))
     
 def StreamUpdate():
     URLs = 'http://www.asahi.com/news/'
     while 1:
         try:
-            soup = BeautifulSoup(requests.get(URLs).content, "lxml").find('ul', 'List')
+            soup = BeautifulSoup(Get(URLs).content, "lxml").find('ul', 'List')
             body = soup.find_all('li')[:-2]
         except:
             print('BodyError. Retrying...')

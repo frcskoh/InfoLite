@@ -11,6 +11,7 @@
   <title>{% block title %}{% endblock %}</title>
   <link rel="stylesheet" href="//cdn.bootcss.com/mdui/0.3.0/css/mdui.min.css">
   <script src="//cdn.bootcss.com/mdui/0.3.0/js/mdui.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script>
 function go(URL)
 {
@@ -52,7 +53,6 @@ var track = new Array([-1]);
     <i class="mdui-icon material-icons">vertical_align_top</i>
   </button>
 {% block scripts %}<!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script>
   var num = parseInt($("#num").attr("name"))
   $(function(){
